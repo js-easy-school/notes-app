@@ -104,7 +104,8 @@
 		border-radius: 10px;
 		margin: 1rem;
 		box-shadow: none;
-		overflow: hidden;
+		overflow: auto;
+		min-height: 0;
 	}
 
 	.editor-header {
@@ -137,7 +138,8 @@
 		display: flex;
 		flex-direction: column;
 		padding: 1rem;
-		overflow: hidden;
+		overflow: auto;
+		min-height: 0;
 	}
 
 	.title-section {
@@ -167,12 +169,14 @@
 
 	.content-section {
 		flex: 1;
-		overflow: hidden;
+		overflow: auto;
+		min-height: 0;
 	}
 
 	.content-textarea {
 		width: 100%;
 		height: 100%;
+		min-height: 120px;
 		border: none;
 		outline: none;
 		background: transparent;
@@ -210,8 +214,9 @@
 
 	@media (max-width: 768px) {
 		.note-editor {
-			margin: 0.5rem;
+			margin: 0.5rem 0.5rem 0.5rem 0.5rem;
 			border-radius: 8px;
+			min-height: 0;
 		}
 		.editor-header {
 			padding: 0.75rem 0.75rem 0.5rem 0.75rem;
@@ -226,6 +231,25 @@
 			flex-direction: column;
 			gap: 0.25rem;
 			align-items: flex-start;
+		}
+		.content-textarea {
+			min-height: 80px;
+			font-size: 1.05rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.note-editor {
+			margin: 0.2rem 0.2rem 0.2rem 0.2rem;
+		}
+		.editor-content {
+			padding: 0.5rem;
+		}
+		.title-input {
+			font-size: 0.98rem;
+		}
+		.content-textarea {
+			font-size: 1rem;
 		}
 	}
 </style> 

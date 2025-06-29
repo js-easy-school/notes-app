@@ -189,6 +189,8 @@
 		flex: 1;
 		background: #181A20;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.empty-state {
@@ -232,10 +234,37 @@
 		}
 		.container {
 			flex-direction: column;
+			height: 100%;
 		}
 		.sidebar {
 			width: 100%;
-			height: 180px;
+			height: auto;
+			min-height: 180px;
+			border-right: none;
+			border-bottom: 1px solid #23242b;
+		}
+		.content {
+			flex: 1;
+			min-height: 0;
+			max-height: 100vh;
+			overflow-y: auto;
+			padding-bottom: 80px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.header {
+			padding: 0.5rem;
+		}
+		.sidebar-header {
+			padding: 0.5rem;
+		}
+		.create-btn {
+			padding: 0.5rem;
+			font-size: 1rem;
+		}
+		.empty-state {
+			padding: 1rem;
 		}
 	}
 </style>
