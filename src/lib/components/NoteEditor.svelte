@@ -11,6 +11,7 @@
 	let titleInput: HTMLInputElement;
 	let contentTextarea: HTMLTextAreaElement;
 	let editorContainer: HTMLDivElement;
+	let wasFixed = false;
 
 	// Автосохранение при изменении
 	let saveTimeout: number;
@@ -49,21 +50,22 @@
 	});
 
 	function onFieldFocus(field: HTMLElement) {
-		if (window.innerWidth <= 768 && field) {
-			// Добавляем отступ снизу к body и контейнеру
-			document.body.style.paddingBottom = '320px';
-			if (editorContainer) editorContainer.style.paddingBottom = '320px';
-			// Скроллим window и контейнер
+		if (window.innerWidth <= 768 && field && editorContainer) {
+			// window.scrollTo вверх
+			window.scrollTo(0, 0);
+			// Делаем редактор фиксированным
+			editorContainer.classList.add('fixed-mobile-editor');
+			wasFixed = true;
 			setTimeout(() => {
 				field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-				window.scrollTo({ top: field.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
 			}, 150);
 		}
 	}
 	function onFieldBlur() {
-		// Убираем отступ снизу
-		document.body.style.paddingBottom = '';
-		if (editorContainer) editorContainer.style.paddingBottom = '';
+		if (wasFixed && editorContainer) {
+			editorContainer.classList.remove('fixed-mobile-editor');
+			wasFixed = false;
+		}
 	}
 
 	// Очистка таймера при размонтировании
@@ -129,6 +131,18 @@
 		box-shadow: none;
 		overflow: auto;
 		min-height: 0;
+	}
+	.fixed-mobile-editor {
+		position: fixed !important;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 100vh !important;
+		z-index: 10000;
+		background: #23242b;
+		margin: 0 !important;
+		border-radius: 0 !important;
 	}
 
 	.editor-header {
@@ -240,6 +254,10 @@
 			margin: 0.5rem 0.5rem 0.5rem 0.5rem;
 			border-radius: 8px;
 			min-height: 0;
+		}
+		.fixed-mobile-editor {
+			margin: 0 !important;
+			border-radius: 0 !important;
 		}
 		.editor-header {
 			padding: 0.75rem 0.75rem 0.5rem 0.75rem;
