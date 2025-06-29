@@ -13,6 +13,9 @@
 	let editorContainer: HTMLDivElement;
 	let wasFixed = false;
 
+	let showScrollBtn = false;
+	let activeField: HTMLElement | null = null;
+
 	// Автосохранение при изменении
 	let saveTimeout: number;
 
@@ -60,11 +63,22 @@
 				field.scrollIntoView({ behavior: 'smooth', block: 'center' });
 			}, 150);
 		}
+		if (window.innerWidth <= 768) {
+			showScrollBtn = true;
+			activeField = field;
+		}
 	}
 	function onFieldBlur() {
 		if (wasFixed && editorContainer) {
 			editorContainer.classList.remove('fixed-mobile-editor');
 			wasFixed = false;
+		}
+		showScrollBtn = false;
+		activeField = null;
+	}
+	function scrollToActiveField() {
+		if (activeField) {
+			activeField.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}
 	}
 
@@ -83,6 +97,13 @@
 			<span class="note-date">Обновлено: {formatDate(note.updatedAt)}</span>
 		</div>
 	</header>
+
+	{#if showScrollBtn}
+		<div class="scroll-hint">
+			<button class="scroll-btn" on:click={scrollToActiveField}>Прокрутить к заметке</button>
+			<span class="scroll-tip">Если поле перекрыто клавиатурой, нажмите кнопку или прокрутите экран вручную</span>
+		</div>
+	{/if}
 
 	<div class="editor-content">
 		<div class="title-section">
@@ -249,6 +270,34 @@
 		border-radius: 4px;
 	}
 
+	.scroll-hint {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+		margin: 0.5rem 0 0.5rem 0;
+	}
+	.scroll-btn {
+		background: #35384a;
+		color: #fff;
+		border: none;
+		border-radius: 6px;
+		padding: 0.5rem 1.2rem;
+		font-size: 1rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: background 0.18s;
+	}
+	.scroll-btn:active {
+		background: #23242b;
+	}
+	.scroll-tip {
+		color: #aaa;
+		font-size: 0.92rem;
+		text-align: center;
+		max-width: 90vw;
+	}
+
 	@media (max-width: 768px) {
 		.note-editor {
 			margin: 0.5rem 0.5rem 0.5rem 0.5rem;
@@ -292,5 +341,9 @@
 		.content-textarea {
 			font-size: 1rem;
 		}
+	}
+
+	@media (min-width: 769px) {
+		.scroll-hint { display: none; }
 	}
 </style> 
