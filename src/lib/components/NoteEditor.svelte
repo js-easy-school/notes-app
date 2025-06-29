@@ -47,6 +47,15 @@
 		}
 	});
 
+	// Автопрокрутка поля ввода в видимую область на мобильных устройствах
+	function scrollToField(field: HTMLElement) {
+		if (window.innerWidth <= 768 && field) {
+			setTimeout(() => {
+				field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}, 100);
+		}
+	}
+
 	// Очистка таймера при размонтировании
 	onMount(() => {
 		return () => {
@@ -69,6 +78,7 @@
 				bind:this={titleInput}
 				bind:value={title}
 				on:input={handleTitleChange}
+				on:focus={() => scrollToField(titleInput)}
 				class="title-input"
 				placeholder="Заголовок заметки..."
 				maxlength="100"
@@ -80,6 +90,7 @@
 				bind:this={contentTextarea}
 				bind:value={content}
 				on:input={handleContentChange}
+				on:focus={() => scrollToField(contentTextarea)}
 				class="content-textarea"
 				placeholder="Начните писать вашу заметку..."
 				rows="20"
