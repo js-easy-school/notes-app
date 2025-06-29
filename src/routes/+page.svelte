@@ -75,10 +75,12 @@
 			{#if selectedNoteId}
 				{@const selectedNote = $notesStore.find(note => note.id === selectedNoteId!)}
 				{#if selectedNote}
-					<NoteEditor
-						note={selectedNote}
-						on:update={({ detail }) => handleNoteUpdate(selectedNoteId!, detail.content, detail.title)}
-					/>
+					{#key selectedNote.id}
+						<NoteEditor
+							note={selectedNote}
+							on:update={({ detail }) => handleNoteUpdate(selectedNoteId!, detail.content, detail.title)}
+						/>
+					{/key}
 				{/if}
 			{:else}
 				<div class="empty-state">

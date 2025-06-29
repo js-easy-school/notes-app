@@ -4,7 +4,7 @@ const { Telegraf, Markup } = require('telegraf');
 const bot = new Telegraf('7638357741:AAEPNwwE6cIFXS0_E1ygzAWSrpCIn8MZE9s');
 
 // Замените на ваш реальный адрес после деплоя на Vercel!
-const WEB_APP_URL = 'https://your-notes-app.vercel.app';
+const WEB_APP_URL = 'https://notes-app-lake-two.vercel.app/';
 
 bot.start((ctx) => {
   ctx.reply(
