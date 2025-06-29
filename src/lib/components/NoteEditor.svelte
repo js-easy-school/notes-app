@@ -10,6 +10,7 @@
 	let content = note.content;
 	let titleInput: HTMLInputElement;
 	let contentTextarea: HTMLTextAreaElement;
+	let editorContainer: HTMLDivElement;
 
 	// Автосохранение при изменении
 	let saveTimeout: number;
@@ -47,13 +48,22 @@
 		}
 	});
 
-	// Автопрокрутка поля ввода в видимую область на мобильных устройствах
-	function scrollToField(field: HTMLElement) {
+	function onFieldFocus(field: HTMLElement) {
 		if (window.innerWidth <= 768 && field) {
+			// Добавляем отступ снизу к body и контейнеру
+			document.body.style.paddingBottom = '320px';
+			if (editorContainer) editorContainer.style.paddingBottom = '320px';
+			// Скроллим window и контейнер
 			setTimeout(() => {
 				field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			}, 100);
+				window.scrollTo({ top: field.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
+			}, 150);
 		}
+	}
+	function onFieldBlur() {
+		// Убираем отступ снизу
+		document.body.style.paddingBottom = '';
+		if (editorContainer) editorContainer.style.paddingBottom = '';
 	}
 
 	// Очистка таймера при размонтировании
@@ -64,7 +74,7 @@
 	});
 </script>
 
-<div class="note-editor">
+<div class="note-editor" bind:this={editorContainer}>
 	<header class="editor-header">
 		<div class="note-info">
 			<span class="note-id">ID: {note.id.slice(0, 8)}...</span>
@@ -78,7 +88,8 @@
 				bind:this={titleInput}
 				bind:value={title}
 				on:input={handleTitleChange}
-				on:focus={() => scrollToField(titleInput)}
+				on:focus={() => onFieldFocus(titleInput)}
+				on:blur={onFieldBlur}
 				class="title-input"
 				placeholder="Заголовок заметки..."
 				maxlength="100"
@@ -90,7 +101,8 @@
 				bind:this={contentTextarea}
 				bind:value={content}
 				on:input={handleContentChange}
-				on:focus={() => scrollToField(contentTextarea)}
+				on:focus={() => onFieldFocus(contentTextarea)}
+				on:blur={onFieldBlur}
 				class="content-textarea"
 				placeholder="Начните писать вашу заметку..."
 				rows="20"
