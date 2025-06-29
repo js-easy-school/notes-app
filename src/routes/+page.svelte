@@ -12,6 +12,11 @@
 		notesStore.loadFromStorage();
 	});
 
+	// После загрузки заметок, если ни одна не выбрана, выделяем первую заметку
+	$: if ($notesStore.length > 0 && !selectedNoteId) {
+		selectedNoteId = $notesStore[0].id;
+	}
+
 	function handleNoteSelect(noteId: string) {
 		selectedNoteId = noteId;
 	}
